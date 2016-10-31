@@ -18,16 +18,20 @@ from driver import STPDriver
 from slave.transport import Serial
 import logging
 
-logger = logging.getLogger('Edwards STP-iX455')
-logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh = logging.FileHandler('stppump.log')
-fh.setLevel(logging.DEBUG)
-fh.setFormatter(formatter)
-logger.addHandler(fh)
-
 class STPPumpFactory:
-    def create_pump(self):
+    def get_logger(self):
+        logger = logging.getLogger('Edwards STP-iX455')
+        logger.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        fh = logging.FileHandler('stppump.log')
+        fh.setLevel(logging.DEBUG)
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+    
+    def create_pump(self, device="/dev/ttyUSB12", logger=None):
+        if logger is None:
+            logger = self.get_logger()
+            
         protocol = STPProtocol(logger=logger)
         protocol.set_name("Edwards STP Pump")
-        return STPDriver(Serial('/dev/ttyUSB12', 9600, 8, 'N', 1, 2), protocol)
+        return STPDriver(Serial(device, 9600, 8, 'N', 1, 2), protocol)
