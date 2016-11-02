@@ -31,4 +31,4 @@ class ReadOptionFuncMessage(object):
 class ReadOptionFuncResponse(AbstractResponse):
     
     def get_remote_operation_mode(self):
-        self._raw_to_integer(self.msg.get_frame(0).get_payload().get_parameter(0, 2))    
+        return self._raw_to_integer(self.msg.get_frame(0).get_payload().get_parameter(0, 2))    
