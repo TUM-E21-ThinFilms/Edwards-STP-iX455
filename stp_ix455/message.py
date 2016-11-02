@@ -151,8 +151,8 @@ class Payload(object):
         if isinstance(value, list):
             length = len(value)
         else:            
-            value = [value]
-            length = 1
+            value = list(value)
+            length = len(value)
             
         if self.is_first:
             required_length = 2 + index + length
