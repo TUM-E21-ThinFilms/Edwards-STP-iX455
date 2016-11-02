@@ -20,6 +20,7 @@ from messages.Command import CommandMessage, CommandResponse
 from messages.ReadFailMess import ReadFailMessMessage, ReadFailMessResponse
 from messages.ReadMeas import ReadMeasMessage, ReadMeasResponse
 from messages.ReadOptionFunc import ReadOptionFuncMessage, ReadOptionFuncResponse
+from messages.SetOptionFunc import SetOptionFuncMessage, SetOptionFuncResponse
 
 class STPDriver(Driver):
 
@@ -63,3 +64,18 @@ class STPDriver(Driver):
     def get_options(self):
         msg = ReadOptionFuncMessage()
         return ReadOptionFuncResponse(self.send_message(msg))
+    
+    def prepare_options(self, get_options=None):       
+        if get_options is None:
+            get_options = self.get_options()
+            
+        if not isinstance(get_options, ReadOptionFuncResponse):
+            raise TypeError()
+            
+        return SetOptionFuncMessage(get_options)
+    
+    def set_options(self, set_options):
+        if not isinstance(set_options, SetOptionFuncMessage):
+            raise TypeError()
+        
+        return SetOptionFuncResponse(self.send_message(set_options))
