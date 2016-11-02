@@ -46,5 +46,8 @@ class SetOptionFuncMessage(object):
         str_mode = str(mode).zfill(2)
         self.payload.set_parameter(0, str_mode)
         
+    def get_message(self):
+        return self.message
+        
 class SetOptionFuncResponse(AbstractResponse):
     pass
