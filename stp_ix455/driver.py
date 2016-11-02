@@ -53,6 +53,8 @@ class STPDriver(Driver):
     
     def get_rotation(self):
         msg = ReadMeasMessage()
+#	resp = self.send_message(msg)
+#	return resp
         return ReadMeasResponse(self.send_message(msg))
     
     def get_error(self):

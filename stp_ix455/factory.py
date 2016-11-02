@@ -27,11 +27,11 @@ class STPPumpFactory:
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(formatter)
         logger.addHandler(fh)
+	return logger
     
     def create_pump(self, device="/dev/ttyUSB12", logger=None):
         if logger is None:
             logger = self.get_logger()
             
         protocol = STPProtocol(logger=logger)
-        protocol.set_name("Edwards STP Pump")
         return STPDriver(Serial(device, 9600, 8, 'N', 1, 2), protocol)

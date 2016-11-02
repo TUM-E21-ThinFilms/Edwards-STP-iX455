@@ -19,7 +19,7 @@ import time
 
 from slave.protocol import Protocol
 from slave.transport import Timeout
-from message import Message, Frame, Payload
+from stp_ix455.message import Message, Frame, Payload
 
 class CommunicationError(Exception):
     pass
@@ -58,11 +58,11 @@ class STPProtocol(Protocol):
 
 	data = map(hex, map(ord, raw_data))
         
-        self.logger.debug("Write ('+str(len(data))+' bytes): "%s"', " ".join(data))
+        self.logger.debug('Write ('+str(len(data))+' bytes): "%s"', " ".join(data))
         
         transport.write("".join(raw_data))
  
-	    time.sleep(1)
+        time.sleep(1)
        
         try:
             response = ord(transport.read_bytes(1))
@@ -77,7 +77,7 @@ class STPProtocol(Protocol):
 	        self.send_frame(transport, frame, retries - 1)
 
         if not response == Message.CHAR_ACK:
-            self.logger.debug("Write not successful. Received response "%s". Retry...", hex(ord(response)))
+            self.logger.debug('Write not successful. Received response "%s". Retry...', hex(ord(response)))
             self.send_frame(transport, frame, retries-1)    
             
             
@@ -120,7 +120,7 @@ class STPProtocol(Protocol):
                           
         response.append(last)
         
-        self.logger.debug("Response (%s bytes): \"%s\"", str(len(response)), " ".join(map(hex, response)))
+        self.logger.debug('Response (%s bytes): "%s"', str(len(response)), " ".join(map(hex, response)))
         
         return Frame(response)
     
@@ -145,23 +145,23 @@ class STPProtocol(Protocol):
             
         return message
     
-    def query(self, transport, message):
-        if not isinstance(message, Message):
+    def query(self, transport, msg):
+        if not isinstance(msg, Message):
             raise TypeError("message must be an instance of Message")
             
-        self.logger.debug("Send message\ "%s\"", message)
+        self.logger.debug('Send message "%s"', msg)
                           
-        self.send_message(transport, message)
-	    time.sleep(1)               
+        self.send_message(transport, msg)
+        time.sleep(1)               
         response = self.read_response(transport)
         return response
 
     def clear(self, transport):
-	    self.logger.debug("Clearing pipe buffer...")
+        self.logger.debug("Clearing pipe buffer...")
         ar = []
         try:	
             while True:
-            ar.append(ord(transport.read_bytes(1)))
+	        ar.append(ord(transport.read_bytes(1)))
         except:
             pass
 

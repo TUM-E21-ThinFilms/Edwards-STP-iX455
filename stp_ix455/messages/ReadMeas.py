@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from controllers.stp.message import Message, Payload, Frame, AbstractResponse
+from stp_ix455.message import Message, Payload, Frame, AbstractResponse
 
 class ReadMeasMessage(object):
     def __init__(self):

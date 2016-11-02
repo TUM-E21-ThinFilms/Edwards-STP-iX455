@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from controllers.stp.message import Message, Payload, Frame, AbstractResponse
+from stp_ix455.message import Message, Payload, Frame, AbstractResponse
 
 class ReadFailMessMessage(object):
     
@@ -22,8 +22,8 @@ class ReadFailMessMessage(object):
         self.payload.set_query()
         self.payload.set_command('F')
         self.frame = Frame(self.payload)
-	    self.message = Message()
-	    self.message.add_frame(self.frame)
+        self.message = Message()
+        self.message.add_frame(self.frame)
 
     def get_message(self):
         return self.message

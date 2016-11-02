@@ -126,7 +126,7 @@ class Payload(object):
             raise RuntimeError("Cannot set query if this payload is not the first one")
         
     def get_type(self):
-        if self.is_first:
+        if not self.is_first:
             return self.TYPE_NONE
 
         if self.payload[0] == self.CHAR_BSP:
@@ -294,14 +294,10 @@ class Frame(object):
     
     def get_raw(self):
         return as_string_list(self.frame + self.payload.get_raw() + [self.terminator, self.chksum])
-    
-    
+        
 class AbstractResponse(object):
     def __init__(self, message):
-	self.msg = None
-
-        if isinstance(message, Message):
-            self.msg = message
+        self.msg = message
         
     def get_response(self):
         return self.msg
@@ -321,4 +317,4 @@ class AbstractResponse(object):
         return [hexa[i:i+2] for i in range(0, len(hexa), 2)]
 
     def is_successful(self):
-	return self.msg.get_frame(0).get_payload().get_type() == Payload.TYPE_ACK
+	return not (self.msg.get_frame(0).get_payload().get_type() == Payload.TYPE_NAK)
