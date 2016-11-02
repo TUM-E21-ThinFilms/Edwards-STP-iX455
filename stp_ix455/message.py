@@ -165,7 +165,6 @@ class Payload(object):
             raise ValueError("index out of range")
         
         if len(self.payload) < required_length:
-            print("Extending payload...")
             self.payload = self.payload + (required_length - len(self.payload)) * [0]
             
         for i in range(0, length):
