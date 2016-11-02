@@ -39,12 +39,12 @@ class SetOptionFuncMessage(object):
         self.message.add_frame(self.frame)
     
     def set_remote_operation_mode(self, mode):
-        op = int(op)
-        if not op in [self.REMOTE_OPERATION_MODE_X2, self.REMOTE_OPERATION_MODE_X3, self.REMOTE_OPERATION_MODE_X5, self.REMOTE_OPERATION_MODE_POWER_SUPPLY, self.REMOTE_OPERATION_MODE_COMMUNICATION_UNIT]:
+        mode = int(mode)
+        if not mode in [self.REMOTE_OPERATION_MODE_X2, self.REMOTE_OPERATION_MODE_X3, self.REMOTE_OPERATION_MODE_X5, self.REMOTE_OPERATION_MODE_POWER_SUPPLY, self.REMOTE_OPERATION_MODE_COMMUNICATION_UNIT]:
             raise ValueError("mode not defined")
 
-        str_op = str(op).zfill(2)
-        self.payload.set_parameter(0, str_op)
+        str_mode = str(mode).zfill(2)
+        self.payload.set_parameter(0, str_mode)
         
 class SetOptionFuncResponse(AbstractResponse):
     pass
