@@ -94,7 +94,7 @@ class STPProtocol(Protocol):
                           
         if not first == Frame.CHAR_STX:
             transport.write(chr(Message.CHAR_NAK))
-            return self.read_response(transport, retries - 1)
+            return self.read_response_frame(transport, retries - 1)
         
         response.append(first)
         i=0
@@ -103,7 +103,7 @@ class STPProtocol(Protocol):
                 byte = ord(transport.read_bytes(1))
             except slave.transport.Timeout:
                 transport.write(chr(Message.CHAR_NAK))
-                return self.read_response(transport, retries - 1)
+                return self.read_response_frame(transport, retries - 1)
                           
             response.append(byte)
             
@@ -116,7 +116,7 @@ class STPProtocol(Protocol):
             last = ord(transport.read_bytes(1))
         except slave.transport.Timeout:
             transport.write(chr(Message.CHAR_NAK))
-            return self.read_response(transport, retries - 1)
+            return self.read_response_frame(transport, retries - 1)
                           
         response.append(last)
         
