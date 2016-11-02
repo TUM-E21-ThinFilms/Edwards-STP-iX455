@@ -19,6 +19,7 @@ from protocol import STPProtocol
 from messages.Command import CommandMessage, CommandResponse
 from messages.ReadFailMess import ReadFailMessMessage, ReadFailMessResponse
 from messages.ReadMeas import ReadMeasMessage, ReadMeasResponse
+from messages.ReadOptionFunc import ReadOptionFuncMessage, ReadOptionFuncResponse
 
 class STPDriver(Driver):
 
@@ -53,10 +54,12 @@ class STPDriver(Driver):
     
     def get_rotation(self):
         msg = ReadMeasMessage()
-#	resp = self.send_message(msg)
-#	return resp
         return ReadMeasResponse(self.send_message(msg))
     
     def get_error(self):
         msg = ReadFailMessMessage()
         return ReadFailMessResponse(self.send_message(msg))
+
+    def get_options(self):
+        msg = ReadOptionFunc()
+        return ReadOptionFuncResponse(self.send_message(msg))
