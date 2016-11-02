@@ -61,5 +61,5 @@ class STPDriver(Driver):
         return ReadFailMessResponse(self.send_message(msg))
 
     def get_options(self):
-        msg = ReadOptionFunc()
+        msg = ReadOptionFuncMessage()
         return ReadOptionFuncResponse(self.send_message(msg))
