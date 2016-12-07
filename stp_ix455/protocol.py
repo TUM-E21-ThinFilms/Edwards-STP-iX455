@@ -16,13 +16,15 @@
 import slave
 import logging
 import time
+import e21_util
 
 from slave.protocol import Protocol
 from slave.transport import Timeout
 from stp_ix455.message import Message, Frame, Payload
 
-class CommunicationError(Exception):
-    pass
+
+from e21_util.lock import InterProcessTransportLock
+from e21_util.error import CommunicationError
 
 class STPProtocol(Protocol):
     def __init__(self, logger=None):
@@ -56,7 +58,7 @@ class STPProtocol(Protocol):
         
         raw_data = frame.get_raw()
 
-	data = map(hex, map(ord, raw_data))
+        data = map(hex, map(ord, raw_data))
         
         self.logger.debug('Write ('+str(len(data))+' bytes): "%s"', " ".join(data))
         
@@ -72,9 +74,10 @@ class STPProtocol(Protocol):
         # retransmit the frame, if:
         #   1. we receive a NAK
         #   2. we receive nothing after 2 seconds
-	    if response == Message.CHAR_NAK:
-	        self.logger.warning("Received NAK(%s). Re-Transmitting message", hex(Message.CHAR_NAK))
-	        self.send_frame(transport, frame, retries - 1)
+
+        if response == Message.CHAR_NAK:
+            self.logger.warning("Received NAK(%s). Re-Transmitting message", hex(Message.CHAR_NAK))
+            self.send_frame(transport, frame, retries - 1)
 
         if not response == Message.CHAR_ACK:
             self.logger.debug('Write not successful. Received response "%s". Retry...', hex(ord(response)))
@@ -146,26 +149,25 @@ class STPProtocol(Protocol):
         return message
     
     def query(self, transport, msg):
-        if not isinstance(msg, Message):
-            raise TypeError("message must be an instance of Message")
-            
-        self.logger.debug('Send message "%s"', msg)
-                          
-        self.send_message(transport, msg)
-        time.sleep(1)               
-        response = self.read_response(transport)
-        return response
+        with InterProcessTransportLock(transport):
+            if not isinstance(msg, Message):
+                raise TypeError("message must be an instance of Message")
+
+            self.logger.debug('Send message "%s"', msg)
+
+            self.send_message(transport, msg)
+            time.sleep(1)
+            response = self.read_response(transport)
+            return response
 
     def clear(self, transport):
-        self.logger.debug("Clearing pipe buffer...")
-        ar = []
-        try:	
-            while True:
-	        ar.append(ord(transport.read_bytes(1)))
-        except:
-            pass
-
-        self.logger.debug("Cleared message '%s'", " ".join(map(hex, ar)))
+        with InterProcessTransportLock(transport):
+            self.logger.debug("Clearing buffer...")
+            try:
+                while True:
+                    transport.read_bytes(25)
+            except:
+                pass
 
     def write(self, transport, message):
         return self.query(transport, message)

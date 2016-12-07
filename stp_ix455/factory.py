@@ -13,10 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+import logging
+from e21_util.transport import Serial
 from protocol import STPProtocol
 from driver import STPDriver
-from slave.transport import Serial
-import logging
 
 class STPPumpFactory:
     def get_logger(self):
@@ -27,7 +28,7 @@ class STPPumpFactory:
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(formatter)
         logger.addHandler(fh)
-	return logger
+        return logger
     
     def create_pump(self, device="/dev/ttyUSB12", logger=None):
         if logger is None:
