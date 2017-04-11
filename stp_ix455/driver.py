@@ -36,7 +36,7 @@ class STPDriver(Driver):
         return self._protocol.query(self._transport, message.get_message())
 	
     def clear(self):
-	self._protocol.clear(self._transport)
+        self._protocol.clear(self._transport)
 
     def start(self):
         msg = CommandMessage()

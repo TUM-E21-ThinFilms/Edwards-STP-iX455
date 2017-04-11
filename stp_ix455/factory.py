@@ -13,22 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-import logging
 from e21_util.transport import Serial
+from e21_util.logging import get_sputter_logger
 from protocol import STPProtocol
 from driver import STPDriver
 
 class STPPumpFactory:
     def get_logger(self):
-        logger = logging.getLogger('Edwards STP-iX455')
-        logger.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        fh = logging.FileHandler('stppump.log')
-        fh.setLevel(logging.DEBUG)
-        fh.setFormatter(formatter)
-        logger.addHandler(fh)
-        return logger
+        return get_sputter_logger('Edwards STP-iX455', 'stppump.log')
     
     def create_pump(self, device="/dev/ttyUSB12", logger=None):
         if logger is None:
