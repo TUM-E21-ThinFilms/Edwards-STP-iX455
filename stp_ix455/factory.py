@@ -15,6 +15,7 @@
 
 from e21_util.transport import Serial
 from e21_util.log import get_sputter_logger
+from e21_util.ports import Ports
 from protocol import STPProtocol
 from driver import STPDriver
 
@@ -22,9 +23,12 @@ class STPPumpFactory:
     def get_logger(self):
         return get_sputter_logger('Edwards STP-iX455', 'stppump.log')
     
-    def create_pump(self, device="/dev/ttyUSB12", logger=None):
+    def create_pump(self, device=None, logger=None):
         if logger is None:
             logger = self.get_logger()
+
+        if device is None:
+            device = Ports().get_port(Ports.DEVICE_TURBO_PUMP)
             
         protocol = STPProtocol(logger=logger)
         return STPDriver(Serial(device, 9600, 8, 'N', 1, 2), protocol)
