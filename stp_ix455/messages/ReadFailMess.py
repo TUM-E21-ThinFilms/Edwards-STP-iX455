@@ -27,6 +27,9 @@ class ReadFailMessMessage(object):
 
     def get_message(self):
         return self.message
+
+    def __str__(self):
+        return "ReadFailMessage"
     
 class ReadFailMessResponse(AbstractResponse):
     

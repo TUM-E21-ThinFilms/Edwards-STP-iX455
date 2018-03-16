@@ -16,35 +16,43 @@
 from stp_ix455.message import Message, Payload, Frame, AbstractResponse
 
 class CommandMessage(object):
-    
+
+    OPERATION_UNKN  = 0
     OPERATION_START = 1
     OPERATION_STOP  = 2
     OPERATION_RESET = 4
-    
+
     def __init__(self):
         self.payload = Payload(None, True)
         self.payload.set_control()
         self.payload.set_command('E')
         self.frame = Frame(self.payload)
-	self.frame.set_terminating(True)
+        self.frame.set_terminating(True)
         self.message = Message()
         self.message.add_frame(self.frame)
-        
+        self._operation = self.OPERATION_UNKN
+
     def get_message(self):
         return self.message
-    
+
     def set_operation(self, op):
         op = int(op)
         if not op in [self.OPERATION_START, self.OPERATION_STOP, self.OPERATION_RESET]:
             raise ValueError("operation not defined")
 
+        self._operation = op
+
         str_op = str(op).zfill(2)
         self.payload.set_parameter(0, str_op)
-    
+
+    def __str__(self):
+        return "CommandMessage: {}".format(self._operation)
+
+
 class CommandResponse(AbstractResponse):
-    
+
     def _is_valid(self):
         frame = self.msg.get_frame(0)
         payload = frame.get_payload()
-        
+
         return payload.get_type() == Payload.TYPE_QUERY

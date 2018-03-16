@@ -48,6 +48,9 @@ class SetOptionFuncMessage(object):
         
     def get_message(self):
         return self.message
-        
+
+    def __str__(self):
+        return "SetOptions"
+
 class SetOptionFuncResponse(AbstractResponse):
     pass

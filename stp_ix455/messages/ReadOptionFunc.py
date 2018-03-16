@@ -27,6 +27,9 @@ class ReadOptionFuncMessage(object):
 
     def get_message(self):
         return self.message
+
+    def __str__(self):
+        return "ReadOptions"
     
 class ReadOptionFuncResponse(AbstractResponse):
     

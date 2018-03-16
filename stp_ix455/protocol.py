@@ -148,12 +148,14 @@ class STPProtocol(Protocol):
             
         return message
     
-    def query(self, transport, msg):
+    def query(self, transport, abstract_msg):
         with InterProcessTransportLock(transport):
+            msg = abstract_msg.get_message()
+
             if not isinstance(msg, Message):
                 raise TypeError("message must be an instance of Message")
 
-            self.logger.debug('Send message "%s"', msg)
+            self.logger.debug('Send message "%s": %s', msg, abstract_msg)
 
             self.send_message(transport, msg)
             time.sleep(1)
