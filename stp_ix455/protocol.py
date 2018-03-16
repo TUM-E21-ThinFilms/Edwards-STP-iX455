@@ -80,7 +80,7 @@ class STPProtocol(Protocol):
             self.send_frame(transport, frame, retries - 1)
 
         if not response == Message.CHAR_ACK:
-            self.logger.debug('Write not successful. Received response "%s". Retry...', hex(ord(response)))
+            self.logger.debug('Write not successful. Received response "%s". Retry...', hex(response))
             self.send_frame(transport, frame, retries-1)    
             
             

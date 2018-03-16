@@ -34,7 +34,7 @@ class STPDriver(Driver):
 
     def send_message(self, message):
         return self._protocol.query(self._transport, message.get_message())
-	
+
     def clear(self):
         self._protocol.clear(self._transport)
 
